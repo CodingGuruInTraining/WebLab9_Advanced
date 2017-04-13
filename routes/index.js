@@ -4,23 +4,34 @@ var router = express.Router();
 
 // "Database". Names of places, and whether the user has visited it or not.
 
-var places = [
-{id: "1", name: "Rome", visited: true},
-{id: "2", name: "New York", visited: false},
-{id: "3", name: "Tokyo", visited: false}
-];
-var counter = places.length;
+// var places = [
+// {id: "1", name: "Rome", visited: true},
+// {id: "2", name: "New York", visited: false},
+// {id: "3", name: "Tokyo", visited: false}
+// ];
+// var counter = places.length;
 
 
 /* GET home page. */
-router.get('/', function(req, res) {
-  res.render('index', { title: 'Travel Wish List', places : places });
+router.get('/', function(req, res, next) {
+  req.db.collection('travel').find().toArray(function(err) {
+    if (err) {
+      return next(err)
+    }
+    return res.render('index', { title: 'Travel Wish List'});
+  })
+
 });
 
 
 /* GET all items home page. */
-router.get('/all', function(req, res) {
-  res.json(places);
+router.get('/all', function(req, res, next) {
+  req.db.collection('travel').find().toArray(function(err) {
+      if (err) {
+          return next(err)
+      }
+  })
+    // res.json(places);
 });
 
 
