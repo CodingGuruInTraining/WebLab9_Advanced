@@ -4,10 +4,44 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var assert = require('assert');
+var mongo = require('mongodb').MongoClient;
 var index = require('./routes/index');
 
 var app = express();
+
+var url = process.env.mongoURL;
+console.log(url);   // to check
+
+mongo.connect(url, function(err, db) {
+    { assert.equal(null, err);
+        console.log('connection successful');
+    }
+
+    app.use('/', function(req, res, next) {
+        req.db = db;
+        next();
+    });
+    app.use('/', index);
+
+    // 404 error catcher.
+    app.use(function(req, res, next) {
+        var err = new Error('Not found');
+        err.status = 404;
+        next(err);
+    });
+
+    // error handler
+    app.use(function(err, req, res, next) {
+        // set locals, only providing error in development
+        res.locals.message = err.message;
+        res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+        // render the error page
+        res.status(err.status || 500);
+        res.render('error');
+    });
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,24 +55,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
+// dev error handler for displaying stacktrace.
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-// error handler
+// prod error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
 });
 
 module.exports = app;
