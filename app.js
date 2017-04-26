@@ -4,16 +4,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var hbs = require('express-handlebars');
 var assert = require('assert');
-var mongo = require('mongodb').MongoClient;
+var MongoClient = require('mongodb').MongoClient;
 var index = require('./routes/index');
 
 var app = express();
 
-var url = process.env.mongoURL;
+var url = process.env.MONGO_URL;
 console.log(url);   // to check
 
-mongo.connect(url, function(err, db) {
+MongoClient.connect(url, function(err, db) {
     { assert.equal(null, err);
         console.log('connection successful');
     }
@@ -45,6 +46,7 @@ mongo.connect(url, function(err, db) {
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+app.engine('.hbs', hbs({ extname: '.hbs', defaultLayout: 'layout'}));
 app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
