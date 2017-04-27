@@ -121,7 +121,8 @@ router.delete('/delete', function(req, res){
         if(err) {
             return next(err);
         }
-        res.json();
+        res.status(201);
+        // res.json(req.body);
     });
 
     // for (var i = 0 ; i < places.length ; i++) {
@@ -136,9 +137,9 @@ router.delete('/delete', function(req, res){
     // console.log('After DELETE, the places list is');
     // console.log(places);
 
-    res.status(200);
-    res.end();
-
+    // res.status(200);
+    // res.end();
+console.log("made it!");
 });
 
 
