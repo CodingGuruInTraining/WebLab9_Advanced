@@ -15,22 +15,22 @@ var counter = places.length;
 /* GET home page. */
 router.get('/', function(req, res, next) {
     // console.log("checkpoint 1");
-    // req.db.collection('travel').distinct('name', function(err, allNames) {
+    // req.db.collection('travel').distinct('name', function (err, allNames) {
     //     console.log("checkpoint 2");
-    //     if(err) {
+    //     if (err) {
     //         return next(err)
     //     }
-    //     console.log("checkpoint 3");
-    req.db.collection('travel').find().toArray(function(err, docs) {
-        console.log("checkpoint 4");
-        if (err) {
-            return next(err)
-        }
-        console.log("checkpoint 5");
-        return res.render('index', { title: 'Travel Wish List'});
-    });
-    console.log('end of homepage get');
-    // });
+        //     console.log("checkpoint 3");
+        req.db.collection('travel').find().toArray(function (err, docs) {
+            console.log("checkpoint 4");
+            if (err) {
+                return next(err)
+            }
+            console.log("checkpoint 5");
+            return res.render('index', {title: 'Travel Wish List'});
+        });
+        console.log('end of homepage get');
+        // });
 });
 
 /* GET all items home page. */
@@ -61,7 +61,7 @@ router.post('/add', function(req, res) {
         }
         res.status(201);
         res.json(place);
-        return res.redirect('/');
+        // return res.redirect('/');
     });
 
     //
@@ -89,7 +89,11 @@ router.put('/update', function(req, res){
                 return next(err);
             }
             // res.status(201);
+
+
             res.json(place);
+
+
             console.log(req.body.visited);
             // return res.redirect('/');
         }
