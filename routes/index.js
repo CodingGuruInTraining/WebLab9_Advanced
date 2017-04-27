@@ -4,12 +4,12 @@ var router = express.Router();
 
 // "Database". Names of places, and whether the user has visited it or not.
 
-// var places = [
-// {id: "1", name: "Rome", visited: true},
-// {id: "2", name: "New York", visited: false},
-// {id: "3", name: "Tokyo", visited: false}
-// ];
-// var counter = places.length;
+var places = [
+{id: "1", name: "Rome", visited: true},
+{id: "2", name: "New York", visited: false},
+{id: "3", name: "Tokyo", visited: false}
+];
+var counter = places.length;
 
 
 /* GET home page. */
@@ -35,26 +35,32 @@ router.get('/', function(req, res, next) {
 
 /* GET all items home page. */
 router.get('/all', function(req, res, next) {
-  req.db.collection('travel').find().toArray(function(err) {
+  req.db.collection('travel').find().toArray(function(err, doc) {
       if (err) {
           return next(err)
       }
   });
-    // res.json(places);
+    res.json(doc);
+    console.log(doc);
+  // res.json(places);
 });
 
 
 /* POST - add a new location */
 router.post('/add', function(req, res) {
-    req.db.collection('travel').insertOne(req.body, function(err) {
+    var name = req.body.name;
+    console.log(req.body);
+    var place = { 'id': ++counter + "" , 'name': name, 'visited': false };
+    console.log(place);
+    req.db.collection('travel').insertOne(place, function(err) {
+        console.log(place);
         if(err) {
             return next(err)
         }
-        res.json(req.body);
+        res.json(place);
         return res.redirect('/');
     });
-  // var name = req.body.name;
-  // var place = { 'id': ++counter + "" , 'name': name, 'visited': false };
+
   //
   // places.push(place);
   //
