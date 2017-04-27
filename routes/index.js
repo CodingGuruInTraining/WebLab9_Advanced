@@ -51,6 +51,7 @@ router.get('/all', function(req, res, next) {
 router.post('/add', function(req, res) {
     var name = req.body.name;
     console.log(req.body);
+// TODO need to do something with the counter; aint workin right
     var place = { 'id': ++counter + "" , 'name': name, 'visited': false };
     console.log(place);
     req.db.collection('travel').insertOne(place, function(err) {
@@ -87,10 +88,10 @@ router.put('/update', function(req, res){
             if(err) {
                 return next(err);
             }
-            res.status(201);
+            // res.status(201);
             res.json(place);
             console.log(req.body.visited);
-            return res.redirect('/');
+            // return res.redirect('/');
         }
     );
 
@@ -116,17 +117,24 @@ router.delete('/delete', function(req, res){
     var place_id = req.body.id;
     console.log(place_id);
 
-    for (var i = 0 ; i < places.length ; i++) {
-        var place = places[i];
-        if (place.id == place_id) {
-            places.splice(i, 1);  //Delete the element at this position
-            res.json(place);
-            break;
+    req.db.collection('travel').deleteOne(req.body, function(err) {
+        if(err) {
+            return next(err);
         }
-    }
+        res.json();
+    });
 
-    console.log('After DELETE, the places list is');
-    console.log(places);
+    // for (var i = 0 ; i < places.length ; i++) {
+    //     var place = places[i];
+    //     if (place.id == place_id) {
+    //         places.splice(i, 1);  //Delete the element at this position
+    //         res.json(place);
+    //         break;
+    //     }
+    // }
+    //
+    // console.log('After DELETE, the places list is');
+    // console.log(places);
 
     res.status(200);
     res.end();
