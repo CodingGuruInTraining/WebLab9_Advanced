@@ -5,9 +5,9 @@ var router = express.Router();
 // "Database". Names of places, and whether the user has visited it or not.
 
 var places = [
-{id: "1", name: "Rome", visited: true},
-{id: "2", name: "New York", visited: false},
-{id: "3", name: "Tokyo", visited: false}
+    {id: "1", name: "Rome", visited: true},
+    {id: "2", name: "New York", visited: false},
+    {id: "3", name: "Tokyo", visited: false}
 ];
 var counter = places.length;
 
@@ -21,15 +21,15 @@ router.get('/', function(req, res, next) {
     //         return next(err)
     //     }
     //     console.log("checkpoint 3");
-        req.db.collection('travel').find().toArray(function(err, docs) {
-            console.log("checkpoint 4");
-            if (err) {
-                return next(err)
-            }
-            console.log("checkpoint 5");
-            return res.render('index', { title: 'Travel Wish List'});
-        });
-        console.log('end of homepage get');
+    req.db.collection('travel').find().toArray(function(err, docs) {
+        console.log("checkpoint 4");
+        if (err) {
+            return next(err)
+        }
+        console.log("checkpoint 5");
+        return res.render('index', { title: 'Travel Wish List'});
+    });
+    console.log('end of homepage get');
     // });
 });
 
@@ -63,16 +63,16 @@ router.post('/add', function(req, res) {
         return res.redirect('/');
     });
 
-  //
-  // places.push(place);
-  //
-  // console.log('After POST, the places list is');
-  // console.log(places);
-  //
-  // res.status(201);      // Created
-  // res.json(place);      // Send new object data back as JSON, if needed.
+    //
+    // places.push(place);
+    //
+    // console.log('After POST, the places list is');
+    // console.log(places);
+    //
+    // res.status(201);      // Created
+    // res.json(place);      // Send new object data back as JSON, if needed.
 
-  // TODO may want to check if place already in list and don't add.
+    // TODO may want to check if place already in list and don't add.
 
 });
 
@@ -80,52 +80,56 @@ router.post('/add', function(req, res) {
 /* PUT - update whether a place has been visited or not */
 router.put('/update', function(req, res){
 
-  var id = req.body.id;
-  var newPlace = {$set: {visited: req.body.visited == "true"}};  // all the body parameters are strings
+    var id = req.body.id;
+    var newPlace = {$set: {visited: "true"}};  // all the body parameters are strings
+    console.log(req.body);
     req.db.collection('travel').findOneAndUpdate(req.body, newPlace, function(err, place) {
-        if(err) {
-            return next(err);
-        }
-        res.json(place);
+            if(err) {
+                return next(err);
+            }
+            res.status(201);
+            res.json(place);
+            console.log(req.body.visited);
+            return res.redirect('/');
         }
     );
 
 
-  // for (var i = 0 ; i < places.length ; i++) {
-  //   var place = places[i];
-  //   if (place.id == id) {
-  //     place.visited = visited;
-  //     places[i] = place;
-  //   }
-  // }
+    // for (var i = 0 ; i < places.length ; i++) {
+    //   var place = places[i];
+    //   if (place.id == id) {
+    //     place.visited = visited;
+    //     places[i] = place;
+    //   }
+    // }
 
-  // console.log('After PUT, the places list is');
-  // console.log(places);
-  //
-  // res.json(place);
-console.log("something might have been updated");
+    // console.log('After PUT, the places list is');
+    // console.log(places);
+    //
+    // res.json(place);
+    console.log("something might have been updated");
 });
 
 
 router.delete('/delete', function(req, res){
 
-  var place_id = req.body.id;
-  console.log(place_id);
+    var place_id = req.body.id;
+    console.log(place_id);
 
-  for (var i = 0 ; i < places.length ; i++) {
-    var place = places[i];
-    if (place.id == place_id) {
-      places.splice(i, 1);  //Delete the element at this position
-      res.json(place);
-      break;
+    for (var i = 0 ; i < places.length ; i++) {
+        var place = places[i];
+        if (place.id == place_id) {
+            places.splice(i, 1);  //Delete the element at this position
+            res.json(place);
+            break;
+        }
     }
-  }
 
-  console.log('After DELETE, the places list is');
-  console.log(places);
+    console.log('After DELETE, the places list is');
+    console.log(places);
 
-  res.status(200);
-  res.end();
+    res.status(200);
+    res.end();
 
 });
 
