@@ -58,6 +58,7 @@ router.post('/add', function(req, res) {
         if(err) {
             return next(err)
         }
+        res.status(201);
         res.json(place);
         return res.redirect('/');
     });
@@ -80,21 +81,29 @@ router.post('/add', function(req, res) {
 router.put('/update', function(req, res){
 
   var id = req.body.id;
-  var visited = req.body.visited == "true";  // all the body parameters are strings
+  var newPlace = {$set: {visited: req.body.visited == "true"}};  // all the body parameters are strings
+    req.db.collection('travel').findOneAndUpdate(req.body, newPlace, function(err, place) {
+        if(err) {
+            return next(err);
+        }
+        res.json(place);
+        }
+    );
 
-  for (var i = 0 ; i < places.length ; i++) {
-    var place = places[i];
-    if (place.id == id) {
-      place.visited = visited;
-      places[i] = place;
-    }
-  }
 
-  console.log('After PUT, the places list is');
-  console.log(places);
+  // for (var i = 0 ; i < places.length ; i++) {
+  //   var place = places[i];
+  //   if (place.id == id) {
+  //     place.visited = visited;
+  //     places[i] = place;
+  //   }
+  // }
 
-  res.json(place);
-
+  // console.log('After PUT, the places list is');
+  // console.log(places);
+  //
+  // res.json(place);
+console.log("something might have been updated");
 });
 
 
