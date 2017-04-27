@@ -14,13 +14,13 @@ var counter = places.length;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    console.log("checkpoint 1");
-    req.db.collection('travel').distinct('name', function(err, allNames) {
-        console.log("checkpoint 2");
-        if(err) {
-            return next(err)
-        }
-        console.log("checkpoint 3");
+    // console.log("checkpoint 1");
+    // req.db.collection('travel').distinct('name', function(err, allNames) {
+    //     console.log("checkpoint 2");
+    //     if(err) {
+    //         return next(err)
+    //     }
+    //     console.log("checkpoint 3");
         req.db.collection('travel').find().toArray(function(err, docs) {
             console.log("checkpoint 4");
             if (err) {
@@ -30,19 +30,20 @@ router.get('/', function(req, res, next) {
             return res.render('index', { title: 'Travel Wish List'});
         });
         console.log('end of homepage get');
-    });
+    // });
 });
 
 /* GET all items home page. */
 router.get('/all', function(req, res, next) {
-  req.db.collection('travel').find().toArray(function(err, doc) {
-      if (err) {
-          return next(err)
-      }
-  });
-    res.json(doc);
-    console.log(doc);
-  // res.json(places);
+    req.db.collection('travel').find().toArray(function (err, docs) {
+        if (err) {
+            return next(err)
+        }
+
+        res.json(docs);
+        console.log(docs);
+        // res.json(places);
+    });
 });
 
 
