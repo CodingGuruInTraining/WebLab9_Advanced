@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var ObjectID = require('mongodb').ObjectID;
 
 // "Database". Names of places, and whether the user has visited it or not.
 
@@ -61,7 +61,7 @@ router.post('/add', function(req, res) {
             return next(err)
         }
         res.status(201);
-        return res.json(place);
+        return res.json(req.body);
         // return res.redirect('/');
     });
 
@@ -85,14 +85,14 @@ router.put('/update', function(req, res){
     var id = req.body._id;
     var newPlace = {$set: {visited: "true"}};  // all the body parameters are strings
     console.log(req.body);
-    req.db.collection('travel').findOneAndUpdate(req.body, newPlace, function(err, place) {
+    req.db.collection('travel').findOneAndUpdate({_id: ObjectID(id)}, newPlace, function(err, place) {
             if(err) {
                 return next(err);
             }
             // res.status(201);
 
 
-            res.json(place);
+            return res.json(req.body);             // maybe replace place with req.body
 
 
             console.log(req.body.visited);
@@ -122,12 +122,14 @@ router.delete('/delete', function(req, res){
     var place_id = req.body._id;
     console.log(place_id);
 
-    req.db.collection('travel').deleteOne(req.body, function(err) {
+    req.db.collection('travel').deleteOne({_id : ObjectID(place_id)}, function(err) {
         if(err) {
             return next(err);
         }
         res.status(201);
-        // res.json(req.body);
+        // return res.json(req.body);
+        res.end();
+        return res.json(req.body);
     });
 
     // for (var i = 0 ; i < places.length ; i++) {
@@ -139,11 +141,12 @@ router.delete('/delete', function(req, res){
     //     }
     // }
     //
-    // console.log('After DELETE, the places list is');
-    // console.log(places);
+    console.log('After DELETE, the places list is');
+    console.log(places);
 
     // res.status(200);
-    // res.end();
+
+
 console.log("made it!");
 });
 

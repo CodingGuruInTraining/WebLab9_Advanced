@@ -116,8 +116,8 @@ function addNewPlace(placename){
     addPlace(data, parent);
 
     // Update listeners
-    var new_checkbox_id = '#' +data._id + '_is_visited';
-    var new_delete_id = '#' +data._id + '_delete';
+    var new_checkbox_id = '#' +data.id + '_is_visited';
+    var new_delete_id = '#' +data.id + '_delete';
 
     $(new_checkbox_id).click(checkListener);
     $(new_delete_id).click(deleteListener);
@@ -155,7 +155,7 @@ function deletePlace(id) {
   }).done(function (data) {
     console.log('DELETE complete');
     // Select div containing this item, and remove from page
-    var selector_id = '#' + data._id + "";
+    var selector_id = '#' + data.id + "";
     $(selector_id).fadeOut(function(){
       $(this).remove();
     });
