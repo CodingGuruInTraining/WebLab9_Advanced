@@ -41,7 +41,7 @@ router.get('/all', function(req, res, next) {
         }
 
         res.json(docs);
-        console.log(docs);
+        // console.log(docs);
         // res.json(places);
     });
 });
@@ -50,18 +50,18 @@ router.get('/all', function(req, res, next) {
 /* POST - add a new location */
 router.post('/add', function(req, res) {
     var name = req.body.name;
-    console.log(req.body);
+    // console.log(req.body);
 // TODO need to do something with the counter; aint workin right
     var place = {'name': name, 'visited': false };
     // var place = { 'id': ++counter + "" , 'name': name, 'visited': false };
-    console.log(place);
+    // console.log(place);
     req.db.collection('travel').insertOne(place, function(err) {
-        console.log(place);
+        // console.log(place);
         if(err) {
             return next(err)
         }
         res.status(201);
-        return res.json(req.body);
+        return res.json(place);
         // return res.redirect('/');
     });
 
@@ -120,16 +120,20 @@ router.put('/update', function(req, res){
 router.delete('/delete', function(req, res){
 
     var place_id = req.body._id;
-    console.log(place_id);
+    console.log('placeid is ' + place_id);
 
     req.db.collection('travel').deleteOne({_id : ObjectID(place_id)}, function(err) {
         if(err) {
             return next(err);
         }
-        res.status(201);
+        res.status(200);
+
+        console.log('end of delete: ==== ' + req.body);
+        console.log('end of delete: ==== ' + {_id : ObjectID(place_id)});
+
+        return res.json({_id : ObjectID(place_id)});
+        // res.end();
         // return res.json(req.body);
-        res.end();
-        return res.json(req.body);
     });
 
     // for (var i = 0 ; i < places.length ; i++) {
@@ -142,7 +146,7 @@ router.delete('/delete', function(req, res){
     // }
     //
     console.log('After DELETE, the places list is');
-    console.log(places);
+    // console.log(places);
 
     // res.status(200);
 
