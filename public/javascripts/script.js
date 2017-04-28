@@ -46,16 +46,16 @@ function addPlacesToPage(places) {
 
 function addPlace(place, parent) {
 
-  var html = '<div id="' + place.id + '"><span class="placename">' + place.name + '</span><label class="visited_label" for="' + place.id + '_is_visited">Visited?</label>';
+  var html = '<div id="' + place._id + '"><span class="placename">' + place.name + '</span><label class="visited_label" for="' + place._id + '_is_visited">Visited?</label>';
 
   if (place.visited) {
-    html += '<span class="controls"><input class="visited" id="' + place.id + '_is_visited" type="checkbox" checked />'
+    html += '<span class="controls"><input class="visited" id="' + place._id + '_is_visited" type="checkbox" checked />'
   }
   else {
-    html += '<span class="controls"><input class="visited" id="' + place.id + '_is_visited" type="checkbox"/>'
+    html += '<span class="controls"><input class="visited" id="' + place._id + '_is_visited" type="checkbox"/>'
   }
 
-  html += '<button id="'+ place.id +'_delete" class="delete">Delete?</button></span></div>';
+  html += '<button id="'+ place._id +'_delete" class="delete">Delete?</button></span></div>';
 
   parent.append(html);
 }
@@ -116,8 +116,8 @@ function addNewPlace(placename){
     addPlace(data, parent);
 
     // Update listeners
-    var new_checkbox_id = '#' +data.id + '_is_visited';
-    var new_delete_id = '#' +data.id + '_delete';
+    var new_checkbox_id = '#' +data._id + '_is_visited';
+    var new_delete_id = '#' +data._id + '_delete';
 
     $(new_checkbox_id).click(checkListener);
     $(new_delete_id).click(deleteListener);
@@ -155,7 +155,7 @@ function deletePlace(id) {
   }).done(function (data) {
     console.log('DELETE complete');
     // Select div containing this item, and remove from page
-    var selector_id = '#' + data.id + "";
+    var selector_id = '#' + data._id + "";
     $(selector_id).fadeOut(function(){
       $(this).remove();
     });

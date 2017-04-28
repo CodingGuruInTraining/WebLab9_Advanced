@@ -4,12 +4,12 @@ var router = express.Router();
 
 // "Database". Names of places, and whether the user has visited it or not.
 
-var places = [
-    {id: "1", name: "Rome", visited: true},
-    {id: "2", name: "New York", visited: false},
-    {id: "3", name: "Tokyo", visited: false}
-];
-var counter = places.length;
+// var places = [
+//     {id: "1", name: "Rome", visited: true},
+//     {id: "2", name: "New York", visited: false},
+//     {id: "3", name: "Tokyo", visited: false}
+// ];
+var counter = 0;
 
 
 /* GET home page. */
@@ -52,7 +52,8 @@ router.post('/add', function(req, res) {
     var name = req.body.name;
     console.log(req.body);
 // TODO need to do something with the counter; aint workin right
-    var place = { 'id': ++counter + "" , 'name': name, 'visited': false };
+    var place = {'name': name, 'visited': false };
+    // var place = { 'id': ++counter + "" , 'name': name, 'visited': false };
     console.log(place);
     req.db.collection('travel').insertOne(place, function(err) {
         console.log(place);
@@ -60,7 +61,7 @@ router.post('/add', function(req, res) {
             return next(err)
         }
         res.status(201);
-        res.json(place);
+        return res.json(place);
         // return res.redirect('/');
     });
 
@@ -81,7 +82,7 @@ router.post('/add', function(req, res) {
 /* PUT - update whether a place has been visited or not */
 router.put('/update', function(req, res){
 
-    var id = req.body.id;
+    var id = req.body._id;
     var newPlace = {$set: {visited: "true"}};  // all the body parameters are strings
     console.log(req.body);
     req.db.collection('travel').findOneAndUpdate(req.body, newPlace, function(err, place) {
@@ -118,7 +119,7 @@ router.put('/update', function(req, res){
 
 router.delete('/delete', function(req, res){
 
-    var place_id = req.body.id;
+    var place_id = req.body._id;
     console.log(place_id);
 
     req.db.collection('travel').deleteOne(req.body, function(err) {
