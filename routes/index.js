@@ -119,7 +119,7 @@ router.put('/update', function(req, res){
 
 router.delete('/delete', function(req, res){
 
-    var place_id = req.body._id;
+    var place_id = req.body.id;
     console.log('placeid is ' + place_id);
 
     req.db.collection('travel').deleteOne({_id : ObjectID(place_id)}, function(err) {
@@ -128,10 +128,10 @@ router.delete('/delete', function(req, res){
         }
         res.status(200);
 
-        console.log('end of delete: ==== ' + req.body);
-        console.log('end of delete: ==== ' + {_id : ObjectID(place_id)});
+        // console.log('end of delete: ==== ' + req.body);
+        // console.log('end of delete: ==== ' + {_id : ObjectID(place_id)});
 
-        return res.json({_id : ObjectID(place_id)});
+        return res.json({'id' : place_id});
         // res.end();
         // return res.json(req.body);
     });

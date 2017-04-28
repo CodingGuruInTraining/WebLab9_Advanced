@@ -162,8 +162,10 @@ console.log('deletePlace: ' + id);
     data: { 'id': id }
   }).done(function (data) {
     console.log('DELETE complete');
+    console.log(data);
     // Select div containing this item, and remove from page
     var selector_id = '#' + data.id + "";
+    console.log(selector_id);
     $(selector_id).fadeOut(function(){
       $(this).remove();
     });
