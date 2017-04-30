@@ -140,11 +140,13 @@ function addNewPlace(placename){
 
 
 function updateVisited(id, visited) {
-
+console.log('updateVisited start');
+console.log('updateVisited: id: ' + id);
+console.log('updateVisited: visited: ' + visited);
   $.ajax({
     method:"PUT",
     url:"/update",
-    data:{ "id":id, "visited":visited }
+    data:{ 'id' : id, 'visited' : visited }
   }).done(function(){
     console.log('PUT complete');  // Could update the page here, if needed
   }).fail(function(error){

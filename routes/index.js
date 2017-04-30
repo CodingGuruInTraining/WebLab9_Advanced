@@ -82,25 +82,20 @@ router.post('/add', function(req, res) {
 /* PUT - update whether a place has been visited or not */
 router.put('/update', function(req, res){
 
-    var id = req.body._id;
+    var id = req.body.id;
+    console.log('router: id is ' + id);
     var newPlace = {$set: {visited: "true"}};  // all the body parameters are strings
     console.log(req.body);
-    req.db.collection('travel').findOneAndUpdate({_id: ObjectID(id)}, newPlace, function(err, place) {
+    console.log('router newPlace: ' + newPlace);
+    req.db.collection('travel').findOneAndUpdate({_id: ObjectID(id), visited : newPlace}, function(err) {
             if(err) {
                 return next(err);
             }
-            // res.status(201);
-
-
-            return res.json(req.body);             // maybe replace place with req.body
-
-
-            console.log(req.body.visited);
-            // return res.redirect('/');
+        console.log('router visited: ' + req.body.visited);
+            return res.json({'id' : id});
+            // return res.json(req.body);             // maybe replace place with req.body
         }
     );
-
-
     // for (var i = 0 ; i < places.length ; i++) {
     //   var place = places[i];
     //   if (place.id == id) {
@@ -118,7 +113,6 @@ router.put('/update', function(req, res){
 
 
 router.delete('/delete', function(req, res){
-
     var place_id = req.body.id;
     console.log('placeid is ' + place_id);
 
@@ -128,32 +122,10 @@ router.delete('/delete', function(req, res){
         }
         res.status(200);
 
-        // console.log('end of delete: ==== ' + req.body);
-        // console.log('end of delete: ==== ' + {_id : ObjectID(place_id)});
-
         return res.json({'id' : place_id});
-        // res.end();
-        // return res.json(req.body);
     });
-
-    // for (var i = 0 ; i < places.length ; i++) {
-    //     var place = places[i];
-    //     if (place.id == place_id) {
-    //         places.splice(i, 1);  //Delete the element at this position
-    //         res.json(place);
-    //         break;
-    //     }
-    // }
-    //
-    console.log('After DELETE, the places list is');
-    // console.log(places);
-
-    // res.status(200);
-
-
 console.log("made it!");
 });
-
 
 console.log("end of routes");
 module.exports = router;
