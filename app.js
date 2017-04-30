@@ -11,8 +11,7 @@ var index = require('./routes/index');
 
 var app = express();
 
-var url = "mongodb://userfox:foxuser@ds113871.mlab.com:13871/traveldb";
-// var url = process.env.MONGO_URL;
+var url = process.env.MONGO_URL;
 console.log(url);   // to check
 
 MongoClient.connect(url, function(err, db) {

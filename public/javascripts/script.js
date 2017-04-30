@@ -46,9 +46,6 @@ function addPlacesToPage(places) {
 
 
 function addPlace(place, parent) {
-// console.log('addPlace: place: ' + place);
-// console.log('addPlace: id: ' + place._id);
-// console.log('addPlace: id2: ' + place.id);
 
   var html = '<div id="' + place._id + '"><span class="placename">' + place.name + '</span><label class="visited_label" for="' + place._id + '_is_visited">Visited?</label>';
 
@@ -67,8 +64,6 @@ function addPlace(place, parent) {
 
 // Listener functions
 function deleteListener() {
-    console.log('deleteListener: ');
-
   $(this).text('Deleting...');              // Change button text to 'deleting...' Visual feedback for slower connections.
   var elem_id = $(this).attr('id');         // Get the id of the element clicked, expected to be in the format '4_delete' for place id 4
   var id = elem_id.replace('_delete', '');  // Cut off the _delete part, left with the number id
@@ -88,7 +83,6 @@ function checkListener() {
 // These functions make AJAX calls
 
 function getAllPlaces(){
-
   $.ajax({
     method:"GET",
     url:"/all"
@@ -101,22 +95,17 @@ function getAllPlaces(){
     console.log("GET error");
     console.log(error);
   });
-
 }
 
 
 function addNewPlace(placename){
-
   $.ajax({
     method:"POST",
     url:"/add",
     data: { "name" : placename }
   }).done(function(data){
-
     console.log('POST complete');
-
     $('#new_place').val('');        // Clear input text box
-
     var parent = $('#place_list');
     addPlace(data, parent);
 
@@ -124,25 +113,17 @@ function addNewPlace(placename){
     var new_checkbox_id = '#' +data._id + '_is_visited';
     var new_delete_id = '#' +data._id + '_delete';
 
-    // console.log('addNewPlace: ' + data._id);
-
-
     $(new_checkbox_id).click(checkListener);
     $(new_delete_id).click(deleteListener);
-
 
   }).fail(function(error){
     console.log('POST Error');
     console.log(error);
   });
-
 }
 
 
 function updateVisited(id, visited) {
-console.log('updateVisited start');
-console.log('updateVisited: id: ' + id);
-console.log('updateVisited: visited: ' + visited);
   $.ajax({
     method:"PUT",
     url:"/update",
@@ -157,17 +138,14 @@ console.log('updateVisited: visited: ' + visited);
 
 
 function deletePlace(id) {
-console.log('deletePlace: ' + id);
   $.ajax({
     method: "DELETE",
     url: "/delete",
     data: { 'id': id }
   }).done(function (data) {
     console.log('DELETE complete');
-    console.log(data);
     // Select div containing this item, and remove from page
     var selector_id = '#' + data.id + "";
-    console.log(selector_id);
     $(selector_id).fadeOut(function(){
       $(this).remove();
     });
@@ -176,4 +154,3 @@ console.log('deletePlace: ' + id);
     console.log(error);
   });
 }
-
