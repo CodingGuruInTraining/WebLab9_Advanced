@@ -87,12 +87,16 @@ router.put('/update', function(req, res){
     var newPlace = {$set: {visited: "true"}};  // all the body parameters are strings
     console.log(req.body);
     console.log('router newPlace: ' + newPlace);
-    req.db.collection('travel').findOneAndUpdate({_id: ObjectID(id), visited : newPlace}, function(err) {
+    req.db.collection('travel').findOneAndUpdate({_id: ObjectID(id)}, newPlace, function(err, doc) {
             if(err) {
                 return next(err);
             }
         console.log('router visited: ' + req.body.visited);
+
+            // return res.json(ObjectID(doc));
+
             return res.json({'id' : id});
+
             // return res.json(req.body);             // maybe replace place with req.body
         }
     );
